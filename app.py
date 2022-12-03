@@ -296,4 +296,4 @@ def send_to_slack(slack_text):
 
 
 # send text to slack
-# send_to_slack(slack_text)
+send_to_slack(slack_text)
