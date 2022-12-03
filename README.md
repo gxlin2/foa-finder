@@ -1,64 +1,23 @@
-# FOA Finder
 
-This is an automated web scraper for finding funding opportunity announcements from grants.gov. Every day, the [grants.gov](https://www.grants.gov/) database is updated and exported to a zipped XML file which is available for download [here](https://www.grants.gov/web/grants/xml-extract.html). This scraper downloads the latest database export, searches it for relevant keywords, and sends matches to a dedicated Slack channel.
+# My Changes:
+`requirements.txt` from the original repo refused to work for me on Oracle Linux or Ubuntu Server 22.04. I've refined it by removing version requirements for certain dependencies. Hasn't broken for me yet, feel free to create an issue ticket if it does for you. 
 
-[Information about the format of the XML file](https://www.grants.gov/help/html/help/index.htm?rhcsh=1&callingApp=custom#t=XMLExtract%2FXMLExtract.htm)
+Documentation has been streamlined and improved for more concise instructions.
 
+`app.py` from the original repo, for some reason, commented out the `send_to_slack(slack_text)` line required for sending the message to Slack. That's been uncommented.
 
-
-## File description
-
-* **app.py**: Main Python application
-* **keywords.csv**: keywords to use for searching FOA titles
-* **nonkeywords.csv**: keywords to avoid for searching FOA titles
-* **requirements.txt**: Requirements file for installing app dependencies with pip
-
-
-
-## Setting environment variables
-
-Environment variables are required for connecting to the Slack API. To edit environment variables on macOS: `touch ~/.bash_profile; open ~/.bash_profile`
-
-Add the line `export VAR_NAME="VAR_VALUE"`, where `VAR_NAME` and `VAR_VALUE` are the name and value of the variable.
-
-
-
-## Running the scraper on a schedule using crontab
-
-Install using `pip install crontab`
-
-
-
-Make the python script executable using `chmod +x app.py`
-
-Use shebang line in the python script (`#!/usr/bin/python3`, or for venv for example: `#!/Users/emuckley/Documents/Github/foa-finder/webenv/bin/python`) to direct to Python exe
-
-Open scheduler using `crontab -e`. Paste the cron scheduler line. Type `:x` to save and exit scheduler. The scheduler line should look something like this for repeating at the start of the hour (0) at 6 pm (18:00 hrs) every 24 hours:
-`0 18 * * * /Users/emuckley/Documents/GitHub/foa-finder/app.py >> ~/cron.log 2>&1`
-
-To list running cron jobs, use `crontab -l`
-
-To remove all cron jobs, use `crontab -r`
-
-
-
-## Setup for development
-
-Install / upgrade pip: `python3 -m pip install --user --upgrade pip`
-
-Test pip version: `python3 -m pip --version`
-
-Install virtualenv: `python3 -m pip install --user virtualenv`
-
-To create a virtual environment, navigate to the project folder and run: `python3 -m venv <env>`, where `<env>` is the name of your new virtual environment.
-
-Before installing packages inside the virtual environment, activate the environment: `source <env>/bin/activate`, where `<env>` is the name of your virtual environment.
-
-To deactivate the environment: `deactivate`
-
-Once the environment is activated, use pip to install libraries in it.
-
-To export the list of installed packages as a `requirements.txt` file: `pip freeze > requirements.txt`
-
-To install packages from the requirements file: `pip install -r requirements.txt`
-
+Also have removed `nonkeywords.csv`. I don't think it provides a very meaningful contribution to the code.
+# Installation and Setup Instructions
+**Tested on Ubuntu 22.04**
+1. Install the latest version of Python and `pip`. 
+2. Clone this repository (`git clone https://github.com/AGaiki/foa-finder.git`)
+3. Navigate into the folder and execute `pip install -r requirements.txt` (sometimes you might need `pip3` depending on if you have an existing version of Python; Additionally, while this might not be the best practice, you might need to prepend that with `sudo` if it complains about not being able to access or write to a specific directory, although running that in an environment will probably solve that).
+4. Create your Slack app: https://api.slack.com/apps
+5. Navigate to the `Incoming Webhooks` page from the sidebar.
+6. Activate the switch for Incoming Webhooks and create a new Webhook. Note the URL, you will need it for the next steps. You will also need to invite it to a Slack instance.
+7. Using your CLI text editor of choice, open /etc/environment and add a new line like so: `SLACK_WEBHOOK_URL="SlackURL"`, replacing `SlackURL` with the webhook link.
+8. Edit `keywords.csv` to include whatever values you wish. I haven't changed the original repo owner's keywords, so make sure to remove and add whatever you wish in the same format as it. While, yes, csv does stand for "comma separated values," there are no commas in that document. That is by design.
+9. Finally, run `python app.py` (or `python3 app.py` if there are multiple versions of Python installed).
+10. Profit! 
+## Level 2: Cronjobs
+This Slack bot can be automated using a cron job to run at a predetermined time of day. The original author provides some pretty clear documentation (albeit, seemingly for Windows) on how to do that. I'll be re-writing the documentation to include Ubuntu Server (and probably only Ubuntu Server) soon.
