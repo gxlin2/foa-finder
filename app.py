@@ -197,24 +197,21 @@ def sort_by_recent_updates(df):
 
 
 def filter_by_keywords(df):
-    """Filter the dataframe by keywords and nonkeywords (words to avoid).
-    The keywords and nonkeywords are set in external csv files called
-    'keywords.csv' and 'nonkeywords.csv'"""
+    """Filter the dataframe by keywords.
+    The keywords are set in an external csv file called
+    'keywords.csv'."""
     # get keywords to filter dataframe
     keywords = list(pd.read_csv('keywords.csv', header=None)[0])
     keywords_str = '|'.join(keywords).lower()
     # get non-keywords to avoid
-    nonkeywords = list(pd.read_csv('nonkeywords.csv', header=None)[0])
-    nonkeywords_str = '|'.join(nonkeywords).lower()
 
     # filter by post date - the current year and previous year only
     # curr_yr = np.max([int(i[-4:]) for i in df['postdate'].values])
     # prev_yr = curr_yr - 1
     # df = df[df['postdate'].str.contains('-'+str(curr_yr), na=False)]
 
-    # filter dataframe by keywords and nonkeywords
+    # filter dataframe by keywords
     df = df[df['description'].str.contains(keywords_str, na=False)]
-    df = df[~df['description'].str.contains(nonkeywords_str, na=False)]
 
     print('Database filtered by keywords')
 
