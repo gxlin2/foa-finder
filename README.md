@@ -15,7 +15,7 @@ Also have removed `nonkeywords.csv`. I don't think it provides a very meaningful
 4. Create your Slack app: https://api.slack.com/apps
 5. Navigate to the `Incoming Webhooks` page from the sidebar.
 6. Activate the switch for Incoming Webhooks and create a new Webhook. Note the URL, you will need it for the next steps. You will also need to invite it to a Slack instance.
-7. Using your CLI text editor of choice, open /etc/environment and add a new line like so: `SLACK_WEBHOOK_URL="SlackURL"`, replacing `SlackURL` with the webhook link.
+7. Using your CLI text editor of choice, open `/etc/environment` and add a new line like so: `SLACK_WEBHOOK_URL="SlackURL"`, replacing `SlackURL` with the webhook link.
 8. Edit `keywords.csv` to include whatever values you wish. I haven't changed the original repo owner's keywords, so make sure to remove and add whatever you wish in the same format as it. While, yes, csv does stand for "comma separated values," there are no commas in that document. That is by design.
 9. Finally, run `python app.py` (or `python3 app.py` if there are multiple versions of Python installed).
 10. Profit! 
