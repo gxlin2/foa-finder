@@ -20,4 +20,8 @@ Also have removed `nonkeywords.csv`. I don't think it provides a very meaningful
 9. Finally, run `python app.py` (or `python3 app.py` if there are multiple versions of Python installed).
 10. Profit! 
 ## Level 2: Cronjobs
-This Slack bot can be automated using a cron job to run at a predetermined time of day. The original author provides some pretty clear documentation (albeit, seemingly for Windows) on how to do that. I'll be re-writing the documentation to include Ubuntu Server (and probably only Ubuntu Server) soon.
+Modeling after the existing documentation from the original repo, I have set up cron jobs for 6:00PM daily:
+1. Run `crontab -e` on the CLI. It might ask you to pick a text editor.
+2. Create a new line. In my case, I'd be inputting the following lines: `0 18 * * 1-7 python3 ~/foa-finder/app.py`. For help creating valid crontab syntax, please refer to this excellent tool: https://crontab.guru/#0_18_*_*_1-7. 
+3. Save.
+4. Profit!
