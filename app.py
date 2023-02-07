@@ -195,14 +195,28 @@ def sort_by_recent_updates(df):
     print('Databae sorted and filtered by date')
     return df
 
+from nltk.corpus import wordnet as wn
 
 def filter_by_keywords(df):
     """Filter the dataframe by keywords.
     The keywords are set in an external csv file called
     'keywords.csv'."""
     # get keywords to filter dataframe
-    keywords = list(pd.read_csv('keywords.csv', header=None)[0])
+    keywords = list(pd.read_csv('keywords testing.csv', header=None)[0])
     keywords_str = '|'.join(keywords).lower()
+
+    hypernyms_set = set()
+
+    for i in keywords:
+        if len(wn.synsets(i.lower())) == 0:
+            continue
+        hypernyms = wn.synsets(i.lower())[0].hypernyms()
+        for j in hypernyms:
+            hypernyms_set.add(j.lemma_names()[0])
+
+    keywords_str += '|' + '|'.join(hypernyms_set)
+
+    keywords_str.replace('_', ' ')
     # get non-keywords to avoid
 
     # filter by post date - the current year and previous year only
@@ -211,12 +225,11 @@ def filter_by_keywords(df):
     # df = df[df['postdate'].str.contains('-'+str(curr_yr), na=False)]
 
     # filter dataframe by keywords
-    df = df[df['description'].str.contains(keywords_str, na=False)]
+    df = df[df['description'].str.contains(keywords_str, na=False)] 
 
     print('Database filtered by keywords')
 
     return df
-
 
 # include only recently updated FOAs
 df = dff[[is_recent(i) for i in dff['lastupdateddate']]]
@@ -284,7 +297,7 @@ def send_to_slack(slack_text):
     print('Sending results to slack')
     try:
         response = requests.post(
-            os.environ['SLACK_WEBHOOK_URL'],
+            "https://hooks.slack.com/services/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",
             data=json.dumps({'text': slack_text}),
             headers={'Content-Type': 'application/json'})
         print('Slack response: ' + str(response.text))
