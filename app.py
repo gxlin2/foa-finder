@@ -196,7 +196,6 @@ def sort_by_recent_updates(df):
     return df
 
 from nltk.corpus import wordnet as wn
-
 def filter_by_keywords(df):
     """Filter the dataframe by keywords.
     The keywords are set in an external csv file called
@@ -217,6 +216,19 @@ def filter_by_keywords(df):
     keywords_str += '|' + '|'.join(hypernyms_set)
 
     keywords_str.replace('_', ' ')
+    # get non-keywords to avoid
+
+    # filter by post date - the current year and previous year only
+    # curr_yr = np.max([int(i[-4:]) for i in df['postdate'].values])
+    # prev_yr = curr_yr - 1
+    # df = df[df['postdate'].str.contains('-'+str(curr_yr), na=False)]
+
+    # filter dataframe by keywords
+    df = df[df['description'].str.contains(keywords_str, na=False)] 
+
+    print('Database filtered by keywords')
+
+    return df
     # get non-keywords to avoid
 
     # filter by post date - the current year and previous year only
